@@ -1,0 +1,15 @@
+let express = require('express');
+let path = require('path');
+let app = express();
+
+// 뷰엔진 설정
+app.set('view engine', 'ejs');
+
+// 뷰 경로가 지정 안 될 경우 작성
+app.set('views', path.join(__dirname, '/views'));
+
+app.use('public', express.static(__dirname + '/public'));
+
+app.use('/', require('./routes/index.js'));
+
+app.listen(3000);
