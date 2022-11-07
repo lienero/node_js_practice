@@ -1,0 +1,28 @@
+{
+  "name": "webblog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gulp": "gulp",
+    "build-dev": "set NODE_ENV=development && gulp",
+    "build-prod": "set NODE_ENV=production && gulp"
+  },
+  "author": "lee",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^6.1.1",
+    "eslint": "^8.27.0",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0",
+    "gulp-uglify": "^3.0.2",
+    "require-dir": "^1.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.2",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.6.1",
+    "popper.js": "^1.16.1",
+    "sass": "^1.56.0"
+  }
+}
