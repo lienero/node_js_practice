@@ -106,3 +106,5 @@ dist
 # 명령어가 있으므로 예외 추가
 development/
 production/
+log/
+!lib
