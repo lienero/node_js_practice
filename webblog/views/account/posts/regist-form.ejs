@@ -17,6 +17,13 @@
         <h1>新規記事登録</h1>
       </div>
       <form method="POST" action="/account/posts/regist/confirm">
+        <% let errors = locals.errors || {}; let original = locals.original || {}; %> <% if (locals.errors) {%>
+        <div class="alert alert-danger">
+          <% for (let key in errors) { %>
+          <div><i class="fa fa-exclamation-circle fa-fw mr-2"></i><%= errors[key] %></div>
+          <% } %>
+        </div>
+        <% } %>
         <div class="row mb-3">
           <label for="url" class="col-sm-2 col-form-label">URL:</label>
           <div class="col-sm-10">
@@ -32,7 +39,7 @@
         <div class="row mb-3">
           <label for="content" class="col-sm-2 col-form-label">本文:</label>
           <div class="col-sm-10">
-            <textarea type="text" class="form-control" id="content" name="content" row mb-3s="6"></textarea>
+            <textarea type="text" class="form-control" id="content" name="content" row="row" mb-3s="6"></textarea>
           </div>
         </div>
         <div class="row mb-3">
@@ -57,5 +64,6 @@
     </main>
 
     <%- include("../../_share/javascripts.ejs") %>
+    <script src="/public/javascripts/account/posts/regist.js"></script>
   </body>
 </html>
