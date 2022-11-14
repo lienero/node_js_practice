@@ -1,4 +1,5 @@
 let { CONNECTION_URL, OPTIONS, DATABSE } = require('../../config/mongodb.config');
+let hash = require('./hash.js');
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 let MongoClient = require('mongodb').MongoClient;
@@ -57,7 +58,7 @@ passport.use(
         db.collection('users')
           .findOne({
             email: username,
-            password: password,
+            password: hash.digest(password),
           })
           .then((user) => {
             if (user) {
