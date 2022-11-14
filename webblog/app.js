@@ -1,7 +1,10 @@
+let { SESSION_SECRET } = require('./config/app.config.js').security;
 let accesslogger = require('./lib/log/accesslogger.js');
 let systemlogger = require('./lib/log/systemlogger.js');
 let express = require('express');
 let bodyParser = require('body-parser');
+let cookieParser = require('cookie-parser');
+let session = require('express-session');
 let app = express();
 
 app.set('view engine', 'ejs');
@@ -14,6 +17,15 @@ app.use(
 
 app.use(accesslogger());
 
+app.use(cookieParser());
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    name: 'sid',
+  }),
+);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

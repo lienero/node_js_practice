@@ -1,6 +1,7 @@
 let { CONNECTION_URL, OPTIONS, DATABASE } = require('../config/mongodb.config');
 let router = require('express').Router();
 let MongoClient = require('mongodb').MongoClient;
+let tokens = new require('csrf')();
 
 // 에러처리
 let validateRegistData = function (body) {
@@ -44,7 +45,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/posts/regist', (req, res) => {
-  res.render('./account/posts/regist-form.ejs');
+  tokens.secret((error, secret) => {
+    let token = tokens.create(secret);
+    req.session._csrf = secret;
+    res.cookie('_csrf', token);
+    res.render('./account/posts/regist-form.ejs');
+  });
 });
 
 router.post('/posts/regist/input', (req, res) => {
@@ -63,6 +69,12 @@ router.post('/posts/regist/confirm', (req, res) => {
 });
 
 router.post('/posts/regist/execute', (req, res) => {
+  let secret = req.session._csrf;
+  let token = req.cookies._csrf;
+
+  if (tokens.verify(secret, token) === false) {
+    throw new Error('Invalid Token.');
+  }
   let original = createRegistData(req.body);
   let errors = validateRegistData(req.body);
   if (errors) {
