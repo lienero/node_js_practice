@@ -40,4 +40,42 @@ app.use('/account/', require('./routes/account.js'));
 
 app.use(systemlogger());
 
+app.use((req, res, next) => {
+  let data = {
+    method: req.method,
+    protocol: req.protocol,
+    version: req.httpVersion,
+    url: req.url,
+  };
+  res.status(404);
+  if (req.xhr) {
+    res.json(data);
+  } else {
+    res.render('./404.ejs', { data });
+  }
+});
+
+app.use((err, req, res, next) => {
+  let data = {
+    method: req.method,
+    protocol: req.protocol,
+    version: req.httpVersion,
+    url: req.url,
+    error:
+      process.env.NODE_ENV === 'development'
+        ? {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          }
+        : undefined,
+  };
+  res.status(500);
+  if (req.xhr) {
+    res.json(data);
+  } else {
+    res.render('./500.ejs', { data });
+  }
+});
+
 app.listen(3000);
