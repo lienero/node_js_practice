@@ -51,6 +51,14 @@ router.get('/login', (req, res) => {
 
 router.post('/login', authenticate());
 
+router.post('/logout', (req, res, next) => {
+  // 로그아웃 함수에 콜백이 필요함
+  req.logout(req.user, (err) => {
+    if (err) return next(err);
+    res.redirect('/account/login');
+  });
+});
+
 router.get('/posts/regist', authorize('readWrite'), (req, res) => {
   tokens.secret((error, secret) => {
     let token = tokens.create(secret);

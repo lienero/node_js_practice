@@ -85,7 +85,16 @@ passport.use(
 
 // 필요한 미들웨어 습득
 initialize = function () {
-  return [passport.initialize(), passport.session()];
+  return [
+    passport.initialize(),
+    passport.session(),
+    function (req, res, next) {
+      if (req.user) {
+        res.locals.user = req.user;
+      }
+      next();
+    },
+  ];
 };
 
 authenticate = function () {
