@@ -85,8 +85,10 @@ router.post('/posts/regist/execute', (req, res) => {
     let db = client.db(DATABASE);
     db.collection('posts')
       .insertOne(original)
-      .then((doc) => {
-        res.render('./account/posts/regist-complete.ejs');
+      .then(() => {
+        delete req.session._csrf;
+        res.clearCookie('_csrf');
+        res.redirect('/account/posts/regist/complete');
       })
       .catch((error) => {
         throw error;
@@ -95,6 +97,10 @@ router.post('/posts/regist/execute', (req, res) => {
         client.close();
       });
   });
+});
+
+router.get('/posts/regist/complete', (req, res) => {
+  res.render('./account/posts/regist-complete.ejs');
 });
 
 module.exports = router;
