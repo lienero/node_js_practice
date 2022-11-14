@@ -1,10 +1,12 @@
 let { SESSION_SECRET } = require('./config/app.config.js').security;
 let accesslogger = require('./lib/log/accesslogger.js');
 let systemlogger = require('./lib/log/systemlogger.js');
+let accountcontrol = require('./lib/security/accountcontrol.js');
 let express = require('express');
 let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let session = require('express-session');
+let flash = require('connect-flash');
 let app = express();
 
 app.set('view engine', 'ejs');
@@ -28,6 +30,8 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(flash());
+app.use(...accountcontrol.initialize());
 
 app.use('/', require('./routes/index.js'));
 app.use('/posts/', require('./routes/posts.js'));
