@@ -1,4 +1,4 @@
-let btnSubmit_onclick = (event) => {
+let btnSubmit_onclick = function (event) {
   let $submit = $(this);
   let $form = $submit.parents('form');
   $form.attr('method', $submit.data('method'));

@@ -1,4 +1,6 @@
+let { CONNECTION_URL, OPTIONS, DATABASE } = require('../config/mongodb.config');
 let router = require('express').Router();
+let MongoClient = require('mongodb').MongoClient;
 
 // 에러처리
 let validateRegistData = function (body) {
@@ -58,6 +60,29 @@ router.post('/posts/regist/confirm', (req, res) => {
     return;
   }
   res.render('./account/posts/regist-confirm.ejs', { original });
+});
+
+router.post('/posts/regist/execute', (req, res) => {
+  let original = createRegistData(req.body);
+  let errors = validateRegistData(req.body);
+  if (errors) {
+    res.render('./account/posts/regist-form.ejs', { errors, original });
+    return;
+  }
+  MongoClient.connect(CONNECTION_URL, OPTIONS, (error, client) => {
+    let db = client.db(DATABASE);
+    db.collection('posts')
+      .insertOne(original)
+      .then((doc) => {
+        res.render('./account/posts/regist-complete.ejs');
+      })
+      .catch((error) => {
+        throw error;
+      })
+      .then(() => {
+        client.close();
+      });
+  });
 });
 
 module.exports = router;
